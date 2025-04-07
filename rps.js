@@ -42,71 +42,118 @@ document.getElementById('scissors').onclick = function () {
 
 /**More tidy code for rps by using function. */
 
-let computerMove = ''; /**Variable: computerMove need to be defined first. Cannot create inside the function because any variables in the scope only exist in the scope.*/
 
-function pickComputerMove() {
-  
-  const randomNumber = Math.random ();   /**Step 1: Generate a new random number*/
+const score = {
+  wins: 0,
+  ties: 0,
+  losses: 0
+}  
 
-  if (randomNumber < 1/3) {
-      computerMove = 'rock';
-  } else if (randomNumber >= 1/3 && randomNumber <2/3) {
-      computerMove = 'paper';
-  } else {
-      computerMove = 'scissors';
-  };
 
-  return 'rock';
+document.getElementById('rock').addEventListener('click', function() {
+  playGame('rock');
+});
+
+document.getElementById('paper').addEventListener('click', function() {
+  playGame('paper');
+});
+
+document.getElementById('scissors').addEventListener('click', function() {
+  playGame('scissors');
+});
+
+/*onclick tells what happens when clicked — only one thing.*/
+/*addEventListener listens for clicks — and lets me do more, or different things, when it's clicked.*/ 
+
+document.getElementById('resetscore').onclick = function() {
+  score.wins = 0;
+  score.ties = 0;
+  score.losses = 0;
+
+  alert("Scores have been reset to 0!");
 }
 
-document.getElementById('rock').onclick = function () {
 
-  console.log(pickComputerMove());
+function playGame(playerMove) {
+  const computerMove = pickComputerMove();
+  let result = '';
 
-  let result = ''; /**Step 3: Determine the result based on player's choice */
+/**Use objects function to store the score.*/
+
+/**- What it’s mean by playGame(playerMove)? 
+This is like saying, "Hey, computer, I picked my toy!" 
+The word inside the parentheses tells the computer which toy (or move) you picked.
+
+-	What it’s mean by const computerMove = pickComputerMove();
+This is like asking, "Okay, computer, please choose your toy!" 
+The computer then picks one at random (rock, paper, or scissors) and saves it as its move.
+
+- Why the probability declaration (math.random) should place at the bottom?
+Imagine you have a big box of crayons. You use one crayon every time you want to draw a picture. 
+Now, think of Math.random() like picking a crayon from that box at random.
+
+When we write our game code, we like to keep the really important parts at the top so we can see them easily. 
+The part that picks a random crayon (or in our game, a random move) is a little helper. We put this helper down at 
+the bottom so that our main story—the game where you choose rock, paper, or scissors—looks neat and tidy.
+
+It doesn't mean that the crayon picker (the Math.random() part) isn't important; it just means we like to organize 
+our code like a neat toy room. All the parts of our game work together, but the main action is up top 
+and the little helper is at the bottom.*/
 
 
-  if (computerMove === 'rock') {    /**Cannot use = here because we're not assigning value here, we just checking whether it is equals to. */
-    result = `It's a tie`;
-  } else if (computerMove === 'paper') {
-    result = 'You lose.';
-  } else {
-    result = 'You win.';
-  }
-  alert(`You picked rock. Computer picked ${computerMove}. ${result}`); /**Step 4: Display the result */
-};
+  if (playerMove === 'scissors') {
+    if (computerMove === 'rock') {
+      result = 'You lose.';
+    } else if (computerMove === 'paper') {
+      result = 'You win.';
+    } else if (computerMove === 'scissors') {
+      result = `It's a tie.`;
+    }
 
-document.getElementById('paper').onclick = function () {
-
-  pickComputerMove();
-  
-  let result = ''; /**Step 3: Determine the result based on player's choice */
-  
-  
-    if (computerMove === 'paper') {    /**Cannot use = here because we're not assigning value here, we just checking whether it is equals to. */
-      result = `It's a tie`;
+  } else if (playerMove === 'paper') {
+     if (computerMove === 'rock') {
+      result = 'You win.';
+    } else if (computerMove === 'paper') {
+      result = `It's a tie.`;
     } else if (computerMove === 'scissors') {
       result = 'You lose.';
-    } else {
-      result = 'You win.';
     }
-    alert(`You picked paper. Computer picked ${computerMove}. ${result}`); /**Step 4: Display the result */
-};
 
-document.getElementById('scissors').onclick = function () {
-
-  pickComputerMove();
-  
-  let result = ''; /**Step 3: Determine the result based on player's choice */
-  
-  
-    if (computerMove === 'scissors') {    /**Cannot use = here because we're not assigning value here, we just checking whether it is equals to. */
-      result = `It's a tie`;
-    } else if (computerMove === 'rock') {
+  } else if (playerMove === 'rock') {
+     if (computerMove === 'rock') {
+      result = `It's a tie.`;
+    } else if (computerMove === 'paper') {
       result = 'You lose.';
-    } else {
+    } else if (computerMove === 'scissors') {
       result = 'You win.';
     }
-    alert(`You picked scissors. Computer picked ${computerMove}. ${result}`); /**Step 4: Display the result */
+  }
+
+    if (result === 'You win.') {
+      score.wins += 1;     //Indicate how the score counts. 
+    } else if (result === `It's a tie.`) {
+      score.ties += 1;
+    } else {
+      score.losses += 1;
+    }
+
+  alert(`You picked scissors. Computer picked ${computerMove}. ${result}
+  Wins: ${score.wins}; Ties: ${score.ties}; Losses: ${score.losses}`); /**Step 4: Display the result and the accumulated results.*/
   };
+
+
+  function pickComputerMove() {
+    const randomNumber = Math.random();
+    let computerMove = '';
+  
+    if (randomNumber >= 0 && randomNumber < 1 / 3) {
+      computerMove = 'rock';
+    } else if (randomNumber >= 1 / 3 && randomNumber < 2 / 3) {
+      computerMove = 'paper';
+    } else if (randomNumber >= 2 / 3 && randomNumber < 1) {
+      computerMove = 'scissors';
+    }
+  
+    return computerMove;
+  }
 

@@ -43,11 +43,34 @@ document.getElementById('scissors').onclick = function () {
 /**More tidy code for rps by using function. */
 
 
-const score = {
+let score = {
   wins: 0,
   ties: 0,
   losses: 0
-}  
+};
+
+/*Use let to create a group of properties that can be change later*/
+/*wins: 0, ties: 0, losses: 0 means there're compartments that holds the number 0.*/
+/*Metaphor: I'm creating a scoreboard start from zero*/
+
+
+const storedScore = localStorage.getItem('score');
+
+/*Create another variable (storedScore) that use to store value that remain constant without further action.*/
+/*localStorage.getItem('score') means what is the value I want to store. Here, is the accumulated result
+from playing the game that its mechanics have defined below.*/
+
+
+if (storedScore) {
+  score = JSON.parse(storedScore); // Convert string back to object
+}
+
+/*Use conditional check, if (storedScore), to let the computer know, o
+only do the next part if we actually got something from storage (not null).*/
+/*Here, score is equal to accumulated score. It is like telling computer 
+“Hey, instead of starting at all 0s, let’s use the last saved numbers.” */
+/*To conclude, overwrite the original score with the stored version.*/
+/*The score is string. We must convert back to usable object using JSON.parse.*/
 
 
 document.getElementById('rock').addEventListener('click', function() {
@@ -69,6 +92,12 @@ document.getElementById('resetscore').onclick = function() {
   score.wins = 0;
   score.ties = 0;
   score.losses = 0;
+
+localStorage.removeItem('score');
+
+/*Include the same localStorage commander in the resetscore button's scope, like here.*/
+/*The same localStorage commander can be used multiple time, depends on where we want to include this command
+that make sense to our project.*/
 
   alert("Scores have been reset to 0!");
 }
@@ -136,6 +165,13 @@ and the little helper is at the bottom.*/
     } else {
       score.losses += 1;
     }
+  
+
+  localStorage.setItem('score', JSON.stringify(score));
+
+  /*'result' is a string name we give for this storage process as we will use it to access the data later.*/
+  /*localStorage only support string, hence, we convert the variable 'result' to string using JSON.stringify.*/
+
 
   alert(`You picked scissors. Computer picked ${computerMove}. ${result}
   Wins: ${score.wins}; Ties: ${score.ties}; Losses: ${score.losses}`); /**Step 4: Display the result and the accumulated results.*/
@@ -156,4 +192,3 @@ and the little helper is at the bottom.*/
   
     return computerMove;
   }
-
